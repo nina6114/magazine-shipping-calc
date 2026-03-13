@@ -20,7 +20,6 @@
         .result-line { display: flex; justify-content: space-between; margin-bottom: 0.8rem; font-size: 1rem; }
         .total-price { color: var(--error-color); font-weight: bold; font-size: 1.4rem; border-top: 1px solid #d1d8dd; margin-top: 10px; padding-top: 10px; }
         .alert { color: #d35400; background: #fff3cd; padding: 10px; border-radius: 6px; font-size: 0.85rem; margin-top: 10px; border: 1px solid #ffeeba; display: none; }
-        .footer-note { font-size: 0.8rem; color: #7f8c8d; margin-top: 1.5rem; line-height: 1.6; border-top: 1px solid #eee; padding-top: 1rem; }
     </style>
 </head>
 <body>
@@ -36,9 +35,9 @@
     <div class="form-group">
         <label id="ui-label-region">1. 選擇區域 (Region)</label>
         <select id="region" onchange="calculate()">
-            <option value="HK_MO" id="opt-hk">香港、澳門 | HK & Macao</option>
-            <option value="ASIA_OCEANIA" id="opt-asia">亞洲、大洋洲 | Asia & Oceania</option>
-            <option value="EU_AM_AF" id="opt-eu">歐、美、非洲 | Europe, America & Africa</option>
+            <option value="HK_MO">香港、澳門 | HK & Macao</option>
+            <option value="ASIA_OCEANIA">亞洲、大洋洲 | Asia & Oceania</option>
+            <option value="EU_AM_AF">歐、美、非洲 | Europe, America & Africa</option>
         </select>
     </div>
 
@@ -66,11 +65,6 @@
         </div>
         <div id="alert-msg" class="alert"></div>
     </div>
-
-    <div class="footer-note" id="ui-note">
-        * 費用僅含 12 期運費，不含雜誌訂閱費。<br>
-        * 12期總重量約 3kg，採小包掛號或包裹寄送。
-    </div>
 </div>
 
 <script>
@@ -85,78 +79,4 @@
             alertSea: "⚠️ 水陸寄送需滿 5 本(套)以上。"
         },
         en: {
-            title: "Annual Shipping Calculator",
-            labelRegion: "1. Select Region",
-            labelMethod: "2. Shipping Method",
-            labelQty: "3. Quantity (1 Set = 12 Issues)",
-            resUnit: "Unit Fee (Annual):",
-            resTotal: "Total Shipping Fee:",
-            alertSea: "⚠️ Sea Freight requires at least 5 sets."
-        }
-    };
-
-    let currentLang = 'zh';
-
-    function setLang(lang) {
-        currentLang = lang;
-        const t = i18n[lang];
-        document.getElementById('ui-title').innerText = t.title;
-        document.getElementById('ui-label-region').innerText = t.labelRegion;
-        document.getElementById('ui-label-method').innerText = t.labelMethod;
-        document.getElementById('ui-label-qty').innerText = t.labelQty;
-        document.getElementById('ui-res-unit').innerText = t.resUnit;
-        document.getElementById('ui-res-total').innerText = t.resTotal;
-        document.getElementById('ui-note').innerHTML = t.note;
-        calculate();
-    }
-
-    function calculate() {
-        const region = document.getElementById('region').value;
-        const method = document.getElementById('method').value;
-        const qty = parseInt(document.getElementById('quantity').value) || 0;
-        const alertMsg = document.getElementById('alert-msg');
-        
-        let unitFee = 0;
-
-        if (method === 'AIR') {
-            alertMsg.style.display = 'none';
-            if (region === 'HK_MO') unitFee = 800;
-            else if (region === 'ASIA_OCEANIA') unitFee = 1100;
-            else unitFee = 1350;
-        } else {
-            // Sea Freight Logic
-            if (qty < 5) {
-                alertMsg.style.display = 'block';
-                alertMsg.innerText = i18n[currentLang].alertSea;
-                document.getElementById('unit-fee').innerText = "---";
-                document.getElementById('total-fee').innerText = "---";
-                return;
-            } else {
-                alertMsg.style.display = 'none';
-                if (region === 'HK_MO' || region === 'ASIA_OCEANIA') {
-                    if (qty <= 10) unitFee = 500;
-                    else if (qty <= 20) unitFee = 450;
-                    else if (qty <= 30) unitFee = 400;
-                    else if (qty <= 40) unitFee = 350;
-                    else unitFee = 300;
-                } else {
-                    if (qty <= 10) unitFee = 750;
-                    else if (qty <= 20) unitFee = 700;
-                    else if (qty <= 30) unitFee = 650;
-                    else if (qty <= 40) unitFee = 600;
-                    else unitFee = 550;
-                }
-            }
-        }
-
-        document.getElementById('unit-fee').innerText = `NT$ ${unitFee.toLocaleString()}`;
-        document.getElementById('total-fee').innerText = `NT$ ${(unitFee * qty).toLocaleString()}`;
-    }
-
-    // Initialize
-    setLang('zh');
-</script>
-
-</body>
-</html>
-
+            title
