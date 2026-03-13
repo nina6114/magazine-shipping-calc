@@ -44,7 +44,7 @@
     <div class="result">
         <div>預估年運費 Total Shipping Fee</div>
         <div class="total-price">NT$ <span id="total">0</span></div>
-        <div class="note" id="unit-note">單本單月運費：NT$ 0</div>
+        <div class="note" id="unit-note">單本單月運費 Monthly shipping fee per book：NT$ 0</div>
     </div>
     
     <p class="note">※ 註：35本以上或大量訂閱請另洽詢。</p>
@@ -54,21 +54,21 @@
     const rates = {
         air: {
             asia: [
-                { max: 3, price: 250 }, { max: 10, price: 210 }, 
+                { max: 4, price: 250 }, { max: 10, price: 210 }, 
                 { max: 20, price: 190 }, { max: 30, price: 170 }, { max: Infinity, price: 160 }
             ],
             global: [
-                { max: 3, price: 300 }, { max: 10, price: 250 }, 
+                { max: 4, price: 300 }, { max: 10, price: 250 }, 
                 { max: 20, price: 220 }, { max: 30, price: 200 }, { max: Infinity, price: 180 }
             ]
         },
         sea: {
             asia: [
-                { max: 3, price: 150 }, { max: 10, price: 130 }, 
+                { max: 4, price: 150 }, { max: 10, price: 130 }, 
                 { max: 20, price: 110 }, { max: 30, price: 100 }, { max: Infinity, price: 90 }
             ],
             global: [
-                { max: 3, price: 200 }, { max: 10, price: 170 }, 
+                { max: 4, price: 200 }, { max: 10, price: 170 }, 
                 { max: 20, price: 150 }, { max: 30, price: 130 }, { max: Infinity, price: 120 }
             ]
         }
@@ -91,7 +91,7 @@
         const annualTotal = unitPrice * qty * 12;
 
         document.getElementById('total').innerText = annualTotal.toLocaleString();
-        document.getElementById('unit-note').innerText = `單本單月運費：NT$ ${unitPrice}`;
+        document.getElementById('unit-note').innerText = `單本單月運費 Monthly shipping fee per book：NT$ ${unitPrice}`;
     }
 
     // 初始化計算
@@ -100,9 +100,3 @@
 
 </body>
 </html>
-
-
-
-
-
-
