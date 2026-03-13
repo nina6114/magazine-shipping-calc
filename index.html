@@ -19,36 +19,36 @@
 <body>
 
 <div class="container">
-    <h2>海外訂閱運費試算</h2>
+    <h2>海外訂閱運費試算  Total Shipping Fee Calculator</h2>
     
     <div class="form-group">
-        <label>寄送方式</label>
+        <label>寄送方式 Shipping Method</label>
         <select id="method" onchange="calculate()">
-            <option value="air">航空郵件 (7-14天)</option>
-            <option value="sea">水陸郵件 (1-3個月)</option>
+            <option value="air">航空郵件(7-14天)  Air(7-14 days)</option>
+            <option value="sea">水陸郵件(1-3個月) Sea(1-3 months)</option>
         </select>
     </div>
 
     <div class="form-group">
-        <label>寄送區域</label>
+        <label>寄送區域 Region</label>
         <select id="region" onchange="calculate()">
-            <option value="asia">亞洲區</option>
-            <option value="global">全球區 (美/歐/大/非)</option>
+            <option value="asia">亞洲區 Asia</option>
+            <option value="global">全球區 (美/歐/大/非) Outside Asia</option>
         </select>
     </div>
 
     <div class="form-group">
-        <label>訂閱本數 (每期)</label>
+        <label>訂閱本數 Quantity</label>
         <input type="number" id="quantity" value="1" min="1" oninput="calculate()">
     </div>
 
     <div class="result">
-        <div>預估年運費 (12期)</div>
+        <div>預估年運費 Total Shipping Fee</div>
         <div class="total-price">NT$ <span id="total">0</span></div>
         <div class="note" id="unit-note">單本單月運費：NT$ 0</div>
     </div>
     
-    <p class="note">※ 註：35本以上或大量訂閱請另洽詢 [cite: 10]。</p>
+    <p class="note">※ 註：35本以上或大量訂閱請另洽詢。</p>
 </div>
 
 <script>
@@ -101,6 +101,7 @@
 
 </body>
 </html>
+
 
 
 
