@@ -44,8 +44,8 @@
     <div class="form-group">
         <label id="ui-label-method">2. 運送方式 (Shipping Method)</label>
         <select id="method" onchange="calculate()">
-            <option value="AIR" id="opt-air">航空 Air (7-20 Days)</option>
-            <option value="SEA" id="opt-sea">水陸 Sea (60-90 Days)</option>
+            <option value="AIR">航空 Air (7-20 Days)</option>
+            <option value="SEA">水陸 Sea (60-90 Days)</option>
         </select>
     </div>
 
@@ -79,4 +79,75 @@
             alertSea: "⚠️ 水陸寄送需滿 5 本(套)以上。"
         },
         en: {
-            title
+            title: "Annual Shipping Calculator",
+            labelRegion: "1. Select Region",
+            labelMethod: "2. Shipping Method",
+            labelQty: "3. Quantity (1 Set = 12 Issues)",
+            resUnit: "Unit Fee (Annual):",
+            resTotal: "Total Shipping Fee:",
+            alertSea: "⚠️ Sea Freight requires at least 5 sets."
+        }
+    };
+
+    let currentLang = 'zh';
+
+    function setLang(lang) {
+        currentLang = lang;
+        const t = i18n[lang];
+        document.getElementById('ui-title').innerText = t.title;
+        document.getElementById('ui-label-region').innerText = t.labelRegion;
+        document.getElementById('ui-label-method').innerText = t.labelMethod;
+        document.getElementById('ui-label-qty').innerText = t.labelQty;
+        document.getElementById('ui-res-unit').innerText = t.resUnit;
+        document.getElementById('ui-res-total').innerText = t.resTotal;
+        calculate();
+    }
+
+    function calculate() {
+        const region = document.getElementById('region').value;
+        const method = document.getElementById('method').value;
+        const qty = parseInt(document.getElementById('quantity').value) || 0;
+        const alertMsg = document.getElementById('alert-msg');
+        
+        let unitFee = 0;
+
+        if (method === 'AIR') {
+            alertMsg.style.display = 'none';
+            if (region === 'HK_MO') unitFee = 800;
+            else if (region === 'ASIA_OCEANIA') unitFee = 1100;
+            else unitFee = 1350;
+        } else {
+            if (qty < 5) {
+                alertMsg.style.display = 'block';
+                alertMsg.innerText = i18n[currentLang].alertSea;
+                document.getElementById('unit-fee').innerText = "---";
+                document.getElementById('total-fee').innerText = "---";
+                return;
+            } else {
+                alertMsg.style.display = 'none';
+                if (region === 'HK_MO' || region === 'ASIA_OCEANIA') {
+                    if (qty <= 10) unitFee = 500;
+                    else if (qty <= 20) unitFee = 450;
+                    else if (qty <= 30) unitFee = 400;
+                    else if (qty <= 40) unitFee = 350;
+                    else unitFee = 300;
+                } else {
+                    if (qty <= 10) unitFee = 750;
+                    else if (qty <= 20) unitFee = 700;
+                    else if (qty <= 30) unitFee = 650;
+                    else if (qty <= 40) unitFee = 600;
+                    else unitFee = 550;
+                }
+            }
+        }
+
+        document.getElementById('unit-fee').innerText = `NT$ ${unitFee.toLocaleString()}`;
+        document.getElementById('total-fee').innerText = `NT$ ${(unitFee * qty).toLocaleString()}`;
+    }
+
+    // Initialize
+    setLang('zh');
+</script>
+
+</body>
+</html>
