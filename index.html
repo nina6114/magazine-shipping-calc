@@ -3,101 +3,161 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>訂閱總運費試算 Total Shipping Fee Calculator</title>
+    <title>聖靈月刊運費試算 | Holy Spirit Monthly Shipping Calculator</title>
     <style>
-        body { font-family: sans-serif; padding: 20px; background-color: #f4f7f6; }
-        .container { max-width: 400px; background: white; padding: 25px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin: auto; }
-        h2 { text-align: center; color: #333; }
-        .form-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; font-weight: bold; }
-        select, input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
-        .result { margin-top: 20px; padding: 15px; background: #e7f3ff; border-radius: 4px; text-align: center; }
-        .total-price { font-size: 1.5em; color: #007bff; font-weight: bold; }
-        .note { font-size: 0.85em; color: #666; margin-top: 10px; }
+        :root { --primary-color: #2c3e50; --accent-color: #3498db; --error-color: #e74c3c; }
+        body { font-family: "Segoe UI", "Microsoft JhengHei", sans-serif; background-color: #f8f9fa; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
+        .card { background: white; padding: 2.5rem; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 100%; max-width: 500px; }
+        .lang-switch { text-align: right; margin-bottom: 1rem; }
+        .lang-btn { background: none; border: 1px solid #ddd; padding: 5px 10px; cursor: pointer; border-radius: 4px; font-size: 0.8rem; transition: 0.3s; }
+        .lang-btn:hover { background: #eee; }
+        h2 { color: var(--primary-color); text-align: center; margin-bottom: 1.5rem; font-size: 1.5rem; border-bottom: 2px solid var(--accent-color); padding-bottom: 10px; }
+        .form-group { margin-bottom: 1.2rem; }
+        label { display: block; margin-bottom: 0.6rem; font-weight: bold; color: #444; font-size: 0.95rem; }
+        select, input { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 1rem; box-sizing: border-box; transition: 0.3s; }
+        select:focus, input:focus { border-color: var(--accent-color); outline: none; box-shadow: 0 0 5px rgba(52,152,219,0.3); }
+        .result-box { background: #f0f7ff; padding: 1.5rem; border-radius: 10px; margin-top: 1.5rem; border-left: 5px solid var(--accent-color); }
+        .result-line { display: flex; justify-content: space-between; margin-bottom: 0.8rem; font-size: 1rem; }
+        .total-price { color: var(--error-color); font-weight: bold; font-size: 1.4rem; border-top: 1px solid #d1d8dd; margin-top: 10px; padding-top: 10px; }
+        .alert { color: #d35400; background: #fff3cd; padding: 10px; border-radius: 6px; font-size: 0.85rem; margin-top: 10px; border: 1px solid #ffeeba; display: none; }
+        .footer-note { font-size: 0.8rem; color: #7f8c8d; margin-top: 1.5rem; line-height: 1.6; border-top: 1px solid #eee; padding-top: 1rem; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h2>海外訂閱一年運費試算<br>Annual Shipping Fee Calculator</h2>    
-    <div class="form-group">
-        <label>寄送方式 Shipping Method</label>
-        <select id="method" onchange="calculate()">
-            <option value="air">航空郵件 (7-14天)  Air (7-14 days)</option>
-            <option value="sea">水陸郵件 (1-3個月)  Sea (1-3 months)</option>
-        </select>
+<div class="card">
+    <div class="lang-switch">
+        <button class="lang-btn" onclick="setLang('zh')">中文</button>
+        <button class="lang-btn" onclick="setLang('en')">English</button>
     </div>
 
+    <h2 id="ui-title">一年份運費試算</h2>
+    
     <div class="form-group">
-        <label>寄送區域 Region</label>
+        <label id="ui-label-region">1. 選擇區域 (Region)</label>
         <select id="region" onchange="calculate()">
-            <option value="asia">亞洲區 Asia</option>
-            <option value="global">全球區(美/歐/大/非) Outside Asia</option>
+            <option value="HK_MO" id="opt-hk">香港、澳門 | HK & Macao</option>
+            <option value="ASIA_OCEANIA" id="opt-asia">亞洲、大洋洲 | Asia & Oceania</option>
+            <option value="EU_AM_AF" id="opt-eu">歐、美、非洲 | Europe, America & Africa</option>
         </select>
     </div>
 
     <div class="form-group">
-        <label>訂閱本數 Quantity</label>
+        <label id="ui-label-method">2. 運送方式 (Shipping Method)</label>
+        <select id="method" onchange="calculate()">
+            <option value="AIR" id="opt-air">航空 Air (7-20 Days)</option>
+            <option value="SEA" id="opt-sea">水陸 Sea (60-90 Days)</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label id="ui-label-qty">3. 訂閱本數 (Quantity of Sets)</label>
         <input type="number" id="quantity" value="1" min="1" oninput="calculate()">
     </div>
 
-    <div class="result">
-        <div>預估年運費 Total Shipping Fee</div>
-        <div class="total-price">NT$ <span id="total">0</span></div>
-        <div class="note" id="unit-note">單本單月運費 Monthly shipping fee per book：NT$ 0</div>
+    <div id="result" class="result-box">
+        <div class="result-line">
+            <span id="ui-res-unit">單套一年運費：</span>
+            <span id="unit-fee">NT$ 0</span>
+        </div>
+        <div class="result-line total-price">
+            <span id="ui-res-total">總計運費：</span>
+            <span id="total-fee">NT$ 0</span>
+        </div>
+        <div id="alert-msg" class="alert"></div>
     </div>
-    
-    <p class="note">※ 註：41本以上或大量訂閱請另洽詢。<br>※ For orders of 41+ copies, please reach out to us for further assistance.</p>
+
+    <div class="footer-note" id="ui-note">
+        * 費用僅含 12 期運費，不含雜誌訂閱費。<br>
+        * 12期總重量約 3kg，採小包掛號或包裹寄送。
+    </div>
 </div>
 
 <script>
-    const rates = {
-        air: {
-            asia: [
-                { max: 4, price: 250 }, { max: 10, price: 210 }, 
-                { max: 20, price: 190 }, { max: 30, price: 170 }, { max: Infinity, price: 160 }
-            ],
-            global: [
-                { max: 4, price: 300 }, { max: 10, price: 250 }, 
-                { max: 20, price: 220 }, { max: 30, price: 200 }, { max: Infinity, price: 180 }
-            ]
+    const i18n = {
+        zh: {
+            title: "聖靈月刊一年運費試算",
+            labelRegion: "1. 選擇區域",
+            labelMethod: "2. 運送方式",
+            labelQty: "3. 訂閱本數 (一套=12期)",
+            resUnit: "單套一年運費：",
+            resTotal: "總計運費：",
+            note: "* 費用僅含 12 期運費，不含雜誌訂閱費。<br>* 12期總重量約 3kg，採小包掛號或包裹寄送。",
+            alertSea: "⚠️ 水陸寄送需滿 5 本(套)以上。"
         },
-        sea: {
-            asia: [
-                { max: 4, price: 150 }, { max: 10, price: 130 }, 
-                { max: 20, price: 110 }, { max: 30, price: 100 }, { max: Infinity, price: 90 }
-            ],
-            global: [
-                { max: 4, price: 200 }, { max: 10, price: 170 }, 
-                { max: 20, price: 150 }, { max: 30, price: 130 }, { max: Infinity, price: 120 }
-            ]
+        en: {
+            title: "Annual Shipping Calculator",
+            labelRegion: "1. Select Region",
+            labelMethod: "2. Shipping Method",
+            labelQty: "3. Quantity (1 Set = 12 Issues)",
+            resUnit: "Unit Fee (Annual):",
+            resTotal: "Total Shipping Fee:",
+            note: "* Fees cover 12 issues of shipping only (Magazine subscription excluded).<br>* Total weight ~3kg. Sent via Registered Mail or Parcel.",
+            alertSea: "⚠️ Sea Freight requires at least 5 sets."
         }
     };
 
-    function calculate() {
-        const method = document.getElementById('method').value;
-        const region = document.getElementById('region').value;
-        const qty = parseInt(document.getElementById('quantity').value) || 0;
-        
-        if (qty <= 0) {
-            document.getElementById('total').innerText = '0';
-            return;
-        }
+    let currentLang = 'zh';
 
-        const tier = rates[method][region].find(r => qty <= r.max);
-        const unitPrice = tier.price;
-        
-        // 年運費 = 單本運費 * 每期本數 * 12個月
-        const annualTotal = unitPrice * qty * 12;
-
-        document.getElementById('total').innerText = annualTotal.toLocaleString();
-        document.getElementById('unit-note').innerText = `單本單月運費 Monthly shipping fee per book：NT$ ${unitPrice}`;
+    function setLang(lang) {
+        currentLang = lang;
+        const t = i18n[lang];
+        document.getElementById('ui-title').innerText = t.title;
+        document.getElementById('ui-label-region').innerText = t.labelRegion;
+        document.getElementById('ui-label-method').innerText = t.labelMethod;
+        document.getElementById('ui-label-qty').innerText = t.labelQty;
+        document.getElementById('ui-res-unit').innerText = t.resUnit;
+        document.getElementById('ui-res-total').innerText = t.resTotal;
+        document.getElementById('ui-note').innerHTML = t.note;
+        calculate();
     }
 
-    // 初始化計算
-    calculate();
+    function calculate() {
+        const region = document.getElementById('region').value;
+        const method = document.getElementById('method').value;
+        const qty = parseInt(document.getElementById('quantity').value) || 0;
+        const alertMsg = document.getElementById('alert-msg');
+        
+        let unitFee = 0;
+
+        if (method === 'AIR') {
+            alertMsg.style.display = 'none';
+            if (region === 'HK_MO') unitFee = 800;
+            else if (region === 'ASIA_OCEANIA') unitFee = 1100;
+            else unitFee = 1350;
+        } else {
+            // Sea Freight Logic
+            if (qty < 5) {
+                alertMsg.style.display = 'block';
+                alertMsg.innerText = i18n[currentLang].alertSea;
+                document.getElementById('unit-fee').innerText = "---";
+                document.getElementById('total-fee').innerText = "---";
+                return;
+            } else {
+                alertMsg.style.display = 'none';
+                if (region === 'HK_MO' || region === 'ASIA_OCEANIA') {
+                    if (qty <= 10) unitFee = 500;
+                    else if (qty <= 20) unitFee = 450;
+                    else if (qty <= 30) unitFee = 400;
+                    else if (qty <= 40) unitFee = 350;
+                    else unitFee = 300;
+                } else {
+                    if (qty <= 10) unitFee = 750;
+                    else if (qty <= 20) unitFee = 700;
+                    else if (qty <= 30) unitFee = 650;
+                    else if (qty <= 40) unitFee = 600;
+                    else unitFee = 550;
+                }
+            }
+        }
+
+        document.getElementById('unit-fee').innerText = `NT$ ${unitFee.toLocaleString()}`;
+        document.getElementById('total-fee').innerText = `NT$ ${(unitFee * qty).toLocaleString()}`;
+    }
+
+    // Initialize
+    setLang('zh');
 </script>
 
 </body>
 </html>
-
