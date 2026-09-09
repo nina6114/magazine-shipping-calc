@@ -113,9 +113,9 @@
 
         if (method === 'AIR') {
             alertMsg.style.display = 'none';
-            if (region === 'HK_MO') unitFee = 800;
-            else if (region === 'ASIA_OCEANIA') unitFee = 1100;
-            else unitFee = 1350;
+            if (region === 'HK_MO') unitFee = 750;
+            else if (region === 'ASIA_OCEANIA') unitFee = 950;
+            else unitFee = 1100;
         } else {
             if (qty < 5) {
                 alertMsg.style.display = 'block';
@@ -126,16 +126,14 @@
             } else {
                 alertMsg.style.display = 'none';
                 if (region === 'HK_MO' || region === 'ASIA_OCEANIA') {
-                    if (qty <= 10) unitFee = 500;
-                    else if (qty <= 20) unitFee = 450;
-                    else if (qty <= 30) unitFee = 400;
-                    else if (qty <= 40) unitFee = 350;
+                    if (qty <= 10) unitFee = 450;
+                    else if (qty <= 20) unitFee = 400;
+                    else if (qty <= 30) unitFee = 350;
                     else unitFee = 300;
                 } else {
-                    if (qty <= 10) unitFee = 750;
-                    else if (qty <= 20) unitFee = 700;
-                    else if (qty <= 30) unitFee = 650;
-                    else if (qty <= 40) unitFee = 600;
+                    if (qty <= 10) unitFee = 700;
+                    else if (qty <= 20) unitFee = 650;
+                    else if (qty <= 30) unitFee = 600;
                     else unitFee = 550;
                 }
             }
