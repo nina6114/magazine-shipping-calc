@@ -92,7 +92,7 @@
         }
         
         select {
-            padding-right: 40px;
+            padding-right: 20px;
         }
 
         select:focus,
@@ -125,6 +125,15 @@
             margin-top: 10px;
             padding-top: 10px;
         }
+        
+        @media (max-width: 600px) {
+            .result-line.total-price {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 4px;
+            }
+        }
+                
 
         .alert {
             color: #d35400;
