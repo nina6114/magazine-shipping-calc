@@ -1,151 +1,616 @@
+```html
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>聖靈月刊運費試算 | Holy Spirit Monthly Shipping Fee Calculator</title>
+    <title>Holy Spirit Monthly Shipping Fee Calculator</title>
+
     <style>
-        :root { --primary-color: #2c3e50; --accent-color: #3498db; --error-color: #e74c3c; }
-        body { font-family: "Segoe UI", "Microsoft JhengHei", sans-serif; background-color: #f8f9fa; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
-        .card { background: white; padding: 2.5rem; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 100%; max-width: 500px; }
-        .lang-switch { text-align: right; margin-bottom: 1rem; }
-        .lang-btn { background: none; border: 1px solid #ddd; padding: 5px 10px; cursor: pointer; border-radius: 4px; font-size: 0.8rem; transition: 0.3s; }
-        .lang-btn:hover { background: #eee; }
-        h2 { color: var(--primary-color); text-align: center; margin-bottom: 1.5rem; font-size: 1.5rem; border-bottom: 2px solid var(--accent-color); padding-bottom: 10px; }
-        .form-group { margin-bottom: 1.2rem; }
-        label { display: block; margin-bottom: 0.6rem; font-weight: bold; color: #444; font-size: 0.95rem; }
-        select, input { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 1rem; box-sizing: border-box; transition: 0.3s; }
-        select:focus, input:focus { border-color: var(--accent-color); outline: none; box-shadow: 0 0 5px rgba(52,152,219,0.3); }
-        .result-box { background: #f0f7ff; padding: 1.5rem; border-radius: 10px; margin-top: 1.5rem; border-left: 5px solid var(--accent-color); }
-        .result-line { display: flex; justify-content: space-between; margin-bottom: 0.8rem; font-size: 1rem; }
-        .total-price { color: var(--error-color); font-weight: bold; font-size: 1.4rem; border-top: 1px solid #d1d8dd; margin-top: 10px; padding-top: 10px; }
-        .alert { color: #d35400; background: #fff3cd; padding: 10px; border-radius: 6px; font-size: 0.85rem; margin-top: 10px; border: 1px solid #ffeeba; display: none; }
+        :root {
+            --primary-color: #2c3e50;
+            --accent-color: #3498db;
+            --error-color: #e74c3c;
+        }
+
+        body {
+            font-family: "Segoe UI", "Microsoft JhengHei", sans-serif;
+            background-color: #f8f9fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .lang-switch {
+            text-align: right;
+            margin-bottom: 1rem;
+        }
+
+        .lang-btn {
+            background: none;
+            border: 1px solid #ddd;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            transition: 0.3s;
+        }
+
+        .lang-btn:hover {
+            background: #eee;
+        }
+
+        .lang-btn.active {
+            background: var(--accent-color);
+            color: white;
+            border-color: var(--accent-color);
+        }
+
+        h2 {
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.6rem;
+            font-weight: bold;
+            color: #444;
+            font-size: 0.95rem;
+        }
+
+        select,
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 1rem;
+            box-sizing: border-box;
+            transition: 0.3s;
+        }
+
+        select:focus,
+        input:focus {
+            border-color: var(--accent-color);
+            outline: none;
+            box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+        }
+
+        .result-box {
+            background: #f0f7ff;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-top: 1.5rem;
+            border-left: 5px solid var(--accent-color);
+        }
+
+        .result-line {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.8rem;
+            font-size: 1rem;
+        }
+
+        .total-price {
+            color: var(--error-color);
+            font-weight: bold;
+            font-size: 1.4rem;
+            border-top: 1px solid #d1d8dd;
+            margin-top: 10px;
+            padding-top: 10px;
+        }
+
+        .alert {
+            color: #d35400;
+            background: #fff3cd;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            margin-top: 10px;
+            border: 1px solid #ffeeba;
+            display: none;
+        }
     </style>
 </head>
+
 <body>
 
 <div class="card">
+
+    <!-- Language Switch -->
     <div class="lang-switch">
-        <button class="lang-btn" onclick="setLang('zh')">中文</button>
-        <button class="lang-btn" onclick="setLang('en')">English</button>
+        <button
+            id="btn-zh"
+            class="lang-btn"
+            onclick="setLang('zh')">
+            中文
+        </button>
+
+        <button
+            id="btn-en"
+            class="lang-btn active"
+            onclick="setLang('en')">
+            English
+        </button>
     </div>
 
-    <h2 id="ui-title">一年份運費試算</h2>
-    
+    <!-- Title -->
+    <h2 id="ui-title">
+        Annual Shipping Fee Calculator
+    </h2>
+
+    <!-- Region -->
     <div class="form-group">
-        <label id="ui-label-region">1. 選擇區域 (Region)</label>
+        <label id="ui-label-region">
+            1. Select Region
+        </label>
+
         <select id="region" onchange="calculate()">
-            <option value="HK_MO">香港、澳門 | HK & Macao</option>
-            <option value="ASIA_OCEANIA">亞洲、大洋洲 | Asia & Oceania</option>
-            <option value="EU_AM_AF">歐、美、非洲 | Europe, America & Africa</option>
+            <option value="HK_MO">
+                Hong Kong & Macao
+            </option>
+
+            <option value="ASIA_OCEANIA">
+                Asia & Oceania
+            </option>
+
+            <option value="EU_AM_AF">
+                Europe, America & Africa
+            </option>
         </select>
     </div>
 
+    <!-- Shipping Method -->
     <div class="form-group">
-        <label id="ui-label-method">2. 運送方式 (Shipping Method)</label>
+        <label id="ui-label-method">
+            2. Shipping Method
+        </label>
+
         <select id="method" onchange="calculate()">
-            <option value="AIR">航空 Air (7-20 Days)</option>
-            <option value="SEA">水陸 Sea (60-90 Days)</option>
+            <option value="AIR">
+                Air (7–20 Days)
+            </option>
+
+            <option value="SEA">
+                Sea (60–90 Days)
+            </option>
         </select>
     </div>
 
+    <!-- Quantity -->
     <div class="form-group">
-        <label id="ui-label-qty">3. 訂閱本數 (Quantity of Sets)</label>
-        <input type="number" id="quantity" value="1" min="1" oninput="calculate()">
+        <label id="ui-label-qty">
+            3. Quantity (1 Set = 12 Issues)
+        </label>
+
+        <input
+            type="number"
+            id="quantity"
+            value="1"
+            min="1"
+            oninput="calculate()"
+        >
     </div>
 
+    <!-- Result -->
     <div id="result" class="result-box">
+
         <div class="result-line">
-            <span id="ui-res-unit">單套一年運費：</span>
-            <span id="unit-fee">NT$ 0</span>
+            <span id="ui-res-unit">
+                Unit Fee (Annual):
+            </span>
+
+            <span id="unit-fee">
+                NT$ 0
+            </span>
         </div>
+
         <div class="result-line total-price">
-            <span id="ui-res-total">總計運費：</span>
-            <span id="total-fee">NT$ 0</span>
+            <span id="ui-res-total">
+                Total Shipping Fee:
+            </span>
+
+            <span id="total-fee">
+                NT$ 0
+            </span>
         </div>
+
         <div id="alert-msg" class="alert"></div>
+
     </div>
+
 </div>
 
+
 <script>
+
+    /*
+     * ================================
+     * Language Text
+     * ================================
+     */
+
     const i18n = {
+
         zh: {
+
             title: "聖靈月刊一年運費試算",
+
             labelRegion: "1. 選擇區域",
+
             labelMethod: "2. 運送方式",
-            labelQty: "3. 訂閱本數 (一套=12期)",
+
+            labelQty: "3. 訂閱本數（一套＝12期）",
+
             resUnit: "單套一年運費：",
+
             resTotal: "總計運費：",
-            alertSea: "⚠️ 水陸寄送需滿 5 本(套)以上。"
+
+            alertSea: "⚠️ 水陸寄送需滿 5 本（套）以上。",
+
+            regions: {
+                HK_MO: "香港、澳門",
+                ASIA_OCEANIA: "亞洲、大洋洲",
+                EU_AM_AF: "歐洲、美洲、非洲"
+            },
+
+            methods: {
+                AIR: "航空（7–20天）",
+                SEA: "水陸（60–90天）"
+            }
+
         },
+
         en: {
+
             title: "Annual Shipping Fee Calculator",
+
             labelRegion: "1. Select Region",
+
             labelMethod: "2. Shipping Method",
+
             labelQty: "3. Quantity (1 Set = 12 Issues)",
+
             resUnit: "Unit Fee (Annual):",
+
             resTotal: "Total Shipping Fee:",
-            alertSea: "⚠️ Sea Freight requires at least 5 sets."
+
+            alertSea: "⚠️ Sea Freight requires at least 5 sets.",
+
+            regions: {
+                HK_MO: "Hong Kong & Macao",
+                ASIA_OCEANIA: "Asia & Oceania",
+                EU_AM_AF: "Europe, America & Africa"
+            },
+
+            methods: {
+                AIR: "Air (7–20 Days)",
+                SEA: "Sea (60–90 Days)"
+            }
+
         }
+
     };
 
-    let currentLang = 'zh';
+
+    /*
+     * Current Language
+     *
+     * Default = English
+     */
+
+    let currentLang = "en";
+
+
+    /*
+     * ================================
+     * Change Language
+     * ================================
+     */
 
     function setLang(lang) {
+
         currentLang = lang;
+
         const t = i18n[lang];
-        document.getElementById('ui-title').innerText = t.title;
-        document.getElementById('ui-label-region').innerText = t.labelRegion;
-        document.getElementById('ui-label-method').innerText = t.labelMethod;
-        document.getElementById('ui-label-qty').innerText = t.labelQty;
-        document.getElementById('ui-res-unit').innerText = t.resUnit;
-        document.getElementById('ui-res-total').innerText = t.resTotal;
+
+
+        /*
+         * Update HTML language attribute
+         */
+
+        document.documentElement.lang =
+            lang === "zh" ? "zh-TW" : "en";
+
+
+        /*
+         * Update page title
+         */
+
+        document.title =
+            lang === "zh"
+                ? "聖靈月刊運費試算"
+                : "Holy Spirit Monthly Shipping Fee Calculator";
+
+
+        /*
+         * Update main interface
+         */
+
+        document.getElementById("ui-title").innerText =
+            t.title;
+
+        document.getElementById("ui-label-region").innerText =
+            t.labelRegion;
+
+        document.getElementById("ui-label-method").innerText =
+            t.labelMethod;
+
+        document.getElementById("ui-label-qty").innerText =
+            t.labelQty;
+
+        document.getElementById("ui-res-unit").innerText =
+            t.resUnit;
+
+        document.getElementById("ui-res-total").innerText =
+            t.resTotal;
+
+
+        /*
+         * Update Region options
+         */
+
+        const regionSelect =
+            document.getElementById("region");
+
+        regionSelect.options[0].text =
+            t.regions.HK_MO;
+
+        regionSelect.options[1].text =
+            t.regions.ASIA_OCEANIA;
+
+        regionSelect.options[2].text =
+            t.regions.EU_AM_AF;
+
+
+        /*
+         * Update Shipping Method options
+         */
+
+        const methodSelect =
+            document.getElementById("method");
+
+        methodSelect.options[0].text =
+            t.methods.AIR;
+
+        methodSelect.options[1].text =
+            t.methods.SEA;
+
+
+        /*
+         * Update active language button
+         */
+
+        document
+            .getElementById("btn-zh")
+            .classList.toggle(
+                "active",
+                lang === "zh"
+            );
+
+        document
+            .getElementById("btn-en")
+            .classList.toggle(
+                "active",
+                lang === "en"
+            );
+
+
+        /*
+         * Recalculate result
+         * and update warning message
+         */
+
         calculate();
+
     }
+
+
+    /*
+     * ================================
+     * Calculate Shipping Fee
+     * ================================
+     */
 
     function calculate() {
-        const region = document.getElementById('region').value;
-        const method = document.getElementById('method').value;
-        const qty = parseInt(document.getElementById('quantity').value) || 0;
-        const alertMsg = document.getElementById('alert-msg');
-        
+
+        const region =
+            document.getElementById("region").value;
+
+        const method =
+            document.getElementById("method").value;
+
+        const qty =
+            parseInt(
+                document.getElementById("quantity").value
+            ) || 0;
+
+        const alertMsg =
+            document.getElementById("alert-msg");
+
+
         let unitFee = 0;
 
-        if (method === 'AIR') {
-            alertMsg.style.display = 'none';
-            if (region === 'HK_MO') unitFee = 750;
-            else if (region === 'ASIA_OCEANIA') unitFee = 950;
-            else unitFee = 1100;
-        } else {
-            if (qty < 5) {
-                alertMsg.style.display = 'block';
-                alertMsg.innerText = i18n[currentLang].alertSea;
-                document.getElementById('unit-fee').innerText = "---";
-                document.getElementById('total-fee').innerText = "---";
-                return;
+
+        /*
+         * ----------------
+         * Air Shipping
+         * ----------------
+         */
+
+        if (method === "AIR") {
+
+            alertMsg.style.display = "none";
+
+
+            if (region === "HK_MO") {
+
+                unitFee = 750;
+
+            } else if (region === "ASIA_OCEANIA") {
+
+                unitFee = 950;
+
             } else {
-                alertMsg.style.display = 'none';
-                if (region === 'HK_MO' || region === 'ASIA_OCEANIA') {
-                    if (qty <= 10) unitFee = 450;
-                    else if (qty <= 20) unitFee = 400;
-                    else if (qty <= 30) unitFee = 350;
-                    else unitFee = 300;
-                } else {
-                    if (qty <= 10) unitFee = 700;
-                    else if (qty <= 20) unitFee = 650;
-                    else if (qty <= 30) unitFee = 600;
-                    else unitFee = 550;
-                }
+
+                unitFee = 1100;
+
             }
+
         }
 
-        document.getElementById('unit-fee').innerText = `NT$ ${unitFee.toLocaleString()}`;
-        document.getElementById('total-fee').innerText = `NT$ ${(unitFee * qty).toLocaleString()}`;
+
+        /*
+         * ----------------
+         * Sea Shipping
+         * ----------------
+         */
+
+        else {
+
+            /*
+             * Minimum 5 sets
+             */
+
+            if (qty < 5) {
+
+                alertMsg.style.display = "block";
+
+                alertMsg.innerText =
+                    i18n[currentLang].alertSea;
+
+                document.getElementById("unit-fee").innerText =
+                    "---";
+
+                document.getElementById("total-fee").innerText =
+                    "---";
+
+                return;
+
+            }
+
+
+            alertMsg.style.display = "none";
+
+
+            /*
+             * Hong Kong / Macao
+             * Asia / Oceania
+             */
+
+            if (
+                region === "HK_MO" ||
+                region === "ASIA_OCEANIA"
+            ) {
+
+                if (qty <= 10) {
+
+                    unitFee = 450;
+
+                } else if (qty <= 20) {
+
+                    unitFee = 400;
+
+                } else if (qty <= 30) {
+
+                    unitFee = 350;
+
+                } else {
+
+                    unitFee = 300;
+
+                }
+
+            }
+
+
+            /*
+             * Europe / America / Africa
+             */
+
+            else {
+
+                if (qty <= 10) {
+
+                    unitFee = 700;
+
+                } else if (qty <= 20) {
+
+                    unitFee = 650;
+
+                } else if (qty <= 30) {
+
+                    unitFee = 600;
+
+                } else {
+
+                    unitFee = 550;
+
+                }
+
+            }
+
+        }
+
+
+        /*
+         * ----------------
+         * Display Results
+         * ----------------
+         */
+
+        document.getElementById("unit-fee").innerText =
+            `NT$ ${unitFee.toLocaleString()}`;
+
+        document.getElementById("total-fee").innerText =
+            `NT$ ${(unitFee * qty).toLocaleString()}`;
+
     }
 
-    // Initialize
-    setLang('zh');
+
+    /*
+     * ================================
+     * Initialize
+     * ================================
+     *
+     * Default language = English
+     */
+
+    setLang("en");
+
 </script>
 
 </body>
 </html>
+```
